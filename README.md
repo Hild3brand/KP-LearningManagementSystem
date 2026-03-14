@@ -11,7 +11,7 @@ git clone https://github.com/username/repository-name.git
 Masuk ke folder project:
 
 ```bash
-cd repository-name
+cd server
 ```
 
 ## 2. Install Dependencies
