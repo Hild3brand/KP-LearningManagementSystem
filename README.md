@@ -42,9 +42,3 @@ npm run dev
 ```
 
 Server akan berjalan menggunakan **nodemon** sehingga otomatis restart ketika ada perubahan pada file.
-
-## 4. Jalankan Server (Production)
-
-```bash
-npm start
-```
