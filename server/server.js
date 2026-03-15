@@ -6,9 +6,13 @@ import dotenv from "dotenv";
 // Import Config
 import db from "./config/Database.js";
 
+// Import Middleware
+import { errorHandler } from "./middleware/errorHandler.js";
+
 // Import Routes
 import AuthRoute from "./routes/authRoute.js";
 import userRoute from "./routes/userRoute.js";
+import chatbotRoutes from "./routes/chatbotRoutes.js";
 
 // Import Models
 import Users from "./models/userModel.js";
@@ -28,6 +32,9 @@ app.use(cors());
 app.use(express.json());
 app.use(AuthRoute);
 app.use(userRoute);
+app.use("/api", chatbotRoutes);
+app.use(errorHandler);
+
 
 // Relations
 Users.belongsTo(Roles,{
