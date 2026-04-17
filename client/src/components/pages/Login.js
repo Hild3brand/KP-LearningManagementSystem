@@ -12,12 +12,12 @@ const Login = () => {
     const Auth = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post(`${process.env.BE_API_URL}/login`, {
                 id: id,
                 password: password,
             });
 
-            const tokenResponse = await axios.get('http://localhost:5000/token', {
+            const tokenResponse = await axios.get(`${process.env.BE_API_URL}/token`, {
                 withCredentials: true
             });
 

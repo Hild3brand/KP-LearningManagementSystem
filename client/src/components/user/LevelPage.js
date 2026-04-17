@@ -16,7 +16,7 @@ const LevelPage = () => {
     useEffect(() => {
         const getInitialData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/token', { withCredentials: true });
+                const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
                 const accessToken = response.data.accessToken;
                 const decoded = jwtDecode(accessToken);
                 
@@ -33,7 +33,7 @@ const LevelPage = () => {
 
         const fetchProgress = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/user-progress', {
+                const response = await axios.get(`${process.env.BE_API_URL}/user-progress`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true 
                 });
@@ -45,7 +45,7 @@ const LevelPage = () => {
 
     const Logout = async () => {
         try {
-            await axios.delete('http://localhost:5000/logout', { withCredentials: true });
+            await axios.delete(`${process.env.BE_API_URL}/logout`, { withCredentials: true });
             navigate('/'); 
         } catch (error) { console.log(error); }
     }

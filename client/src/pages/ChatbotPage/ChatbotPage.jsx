@@ -57,7 +57,7 @@ const ChatbotPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/chat",
+        `${process.env.BE_API_URL}/api/chat`,
         {
           message: currentInput,
           level_detail_id: user.level_detail_id,

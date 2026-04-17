@@ -24,7 +24,7 @@ const Register = () => {
 
         try {
             // Kita kirim 5 data persis seperti yang diminta backend kamu
-            await axios.post('http://localhost:5000/register', {
+            await axios.post(`${process.env.BE_API_URL}/register`, {
                 id: id,
                 name: name,
                 password: password,

@@ -1,22 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-// 1. Tambahkan 'Link' di sini
 import { useNavigate, Link } from 'react-router-dom';
 
-// 2. Tambahkan prop '{ dashboardRoute }' di dalam kurung
 const Navbar = ({ dashboardRoute }) => {
   const navigate = useNavigate();  
 
   const Logout = async() => {
     try {
-        await axios.delete('http://localhost:5000/logout');
+        await axios.delete(`${process.env.BE_API_URL}/logout`);
         navigate("/");
     } catch (error) {
         console.log(error);
     }
   }
 
-  // Jika prop dashboardRoute tidak dikirim, defaultnya ke '/dashboard'
   const homeTarget = dashboardRoute || "/dashboard";
 
   return (

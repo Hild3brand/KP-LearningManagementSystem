@@ -24,7 +24,7 @@ const TeacherDashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get('http://localhost:5000/token', {
+                const response = await axios.get(`${process.env.BE_API_URL}/token`, {
                     withCredentials: true 
                 });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
@@ -45,7 +45,7 @@ const TeacherDashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/token', {
+            const response = await axios.get(`${process.env.BE_API_URL}/token`, {
                 withCredentials: true 
             });
             
