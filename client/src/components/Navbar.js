@@ -2,12 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
+
 const Navbar = ({ dashboardRoute }) => {
   const navigate = useNavigate();  
 
   const Logout = async() => {
     try {
-        await axios.delete(`${process.env.BE_API_URL}/logout`);
+        await axios.delete(`${process.env.REACT_APP_BE_API_URL}/logout`);
         navigate("/");
     } catch (error) {
         console.log(error);

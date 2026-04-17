@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import "./LoginPage.css";
 
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${process.env.BE_API_URL}/login`, {
+      const res = await axios.post(`${process.env.REACT_APP_BE_API_URL}/login`, {
         id,
         password
       });

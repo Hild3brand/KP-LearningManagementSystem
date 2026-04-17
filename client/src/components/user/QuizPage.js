@@ -4,6 +4,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+
 const QuizPage = () => {
     const { levelId } = useParams(); 
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ const QuizPage = () => {
     useEffect(() => {
         const refreshToken = async () => {
             try {
-                const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
+                const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, { withCredentials: true });
                 setToken(response.data.accessToken);
             } catch (error) {
                 if (error.response) navigate('/'); 
@@ -78,7 +79,7 @@ const QuizPage = () => {
             setErrorMsg('');
             try {
                 // PANGGIL ENDPOINT AI DI BACKEND LU
-                const response = await axios.post(`${process.env.BE_API_URL}/api/generate-level-quiz`, {
+                const response = await axios.post(`${process.env.REACT_APP_BE_API_URL}/api/generate-level-quiz`, {
                     levelId: levelId
                 }, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -122,7 +123,7 @@ const QuizPage = () => {
             const xpPerQuestion = aiQuestions.questions[0]?.xpReward || 15;
             const earnedXP = score * xpPerQuestion; 
             
-            await axios.post(`${process.env.BE_API_URL}/finish-level`, {
+            await axios.post(`${process.env.REACT_APP_BE_API_URL}/finish-level`, {
                 levelId: levelId || 'AI-QUIZ', 
                 addedXP: earnedXP
             }, { 

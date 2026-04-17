@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar'; 
 
+
 const axiosJWT = axios.create();
 
 const AdminDashboard = () => {
@@ -30,7 +31,7 @@ const AdminDashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
+                const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, { withCredentials: true });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
                 setToken(response.data.accessToken);
                 const decoded = jwtDecode(response.data.accessToken);
@@ -45,7 +46,7 @@ const AdminDashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
+            const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, { withCredentials: true });
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken); 
             setName(decoded.name); 
@@ -57,7 +58,7 @@ const AdminDashboard = () => {
 
     const getUsers = async () => {
         try {
-            const response = await axiosJWT.get(`${process.env.BE_API_URL}/users`, {
+            const response = await axiosJWT.get(`${process.env.REACT_APP_BE_API_URL}/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(response.data);
@@ -70,7 +71,7 @@ const AdminDashboard = () => {
     const deleteUser = async (id) => {
         if (window.confirm("Yakin ingin menghapus secara permanen?")) {
             try {
-                await axiosJWT.delete(`${process.env.BE_API_URL}/users/${id}`, {
+                await axiosJWT.delete(`${process.env.REACT_APP_BE_API_URL}/users/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 getUsers(); 
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axiosJWT.patch(`${process.env.BE_API_URL}/users/${editData.id}`, {
+            await axiosJWT.patch(`${process.env.REACT_APP_BE_API_URL}/users/${editData.id}`, {
                 name: editData.name,
                 status: editData.status
             }, {

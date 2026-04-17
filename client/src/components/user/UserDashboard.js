@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import CourseMap from './CourseMap'; // Pastikan path-nya sesuai
 const axiosJWT = axios.create();
 
+
 const UserDashboard = () => {
     // --- STATE DITAMBAHKAN DI SINI ---
     const [name, setName] = useState('');
@@ -28,7 +29,7 @@ const UserDashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get(`${process.env.BE_API_URL}/token`, {
+                const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, {
                     withCredentials: true 
                 });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
@@ -53,7 +54,7 @@ const UserDashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get(`${process.env.BE_API_URL}/token`, {
+            const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, {
                 withCredentials: true 
             });
             
@@ -77,7 +78,7 @@ const UserDashboard = () => {
     // Fungsi Logout
     const Logout = async () => {
         try {
-            await axios.delete(`${process.env.BE_API_URL}/logout`, {
+            await axios.delete(`${process.env.REACT_APP_BE_API_URL}/logout`, {
                 withCredentials: true 
             });
             navigate('/'); // Arahkan kembali ke halaman login
