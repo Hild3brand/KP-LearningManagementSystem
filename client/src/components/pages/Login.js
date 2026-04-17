@@ -11,6 +11,7 @@ const Login = () => {
 
     const Auth = async (e) => {
         e.preventDefault();
+        console.log(process.env.BE_API_URL);
         try {
             const response = await axios.post(`${process.env.BE_API_URL}/login`, {
                 id: id,
