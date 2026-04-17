@@ -20,6 +20,10 @@ const Users = db.define("users", {
         type: DataTypes.ENUM("Active", "Inactive"),
         allowNull: false
     },
+    xp: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     url_photo: {
         type: DataTypes.STRING,
         allowNull: true
@@ -28,10 +32,19 @@ const Users = db.define("users", {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    last_daily_xp: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
     roles_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    level_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
+    
 },{
     freezeTableName: true
 });

@@ -1,48 +1,55 @@
-// Import Packages
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+    import express from "express";
+    import dotenv from "dotenv";
+    import cookieParser from "cookie-parser";
+    import cors from "cors";
 
-// Import Config
-import db from "./config/Database.js";
+    // Import Config Database
+    import db from "./config/Database.js";
 
-// Import Middleware
-import { errorHandler } from "./middleware/errorHandler.js";
+    // Import Middleware Error Handler
+    import { errorHandler } from "./middleware/errorHandler.js";
 
-// Import Routes
-import AuthRoute from "./routes/authRoute.js";
-import userRoute from "./routes/userRoute.js";
-import chatbotRoutes from "./routes/chatbotRoutes.js";
+    // Import Routes
+    import router from "./routes/index.js"; 
+    import chatbotRoutes from "./routes/chatbotRoutes.js"; // Cukup satu kali import
 
-// Import Models
-import Users from "./models/userModel.js";
-import Roles from "./models/roleModel.js";
+    // Import Models 
+    // PERHATIAN: Pastikan path ini sesuai dengan file tempat kamu mendefinisikan relasi (seperti dibahas sebelumnya)
+    import { Users, Roles } from "./models/index.js"; 
 
-dotenv.config();
-const app = express();
+    dotenv.config();
+    const app = express();
 
-try {
-    await db.authenticate();
-    console.log("Database Connected");
-} catch (error) {
-    console.log(error);
-}
+    // 1. Koneksi Database
+    try {
+        await db.authenticate();
+        console.log("Database connected successfully");
+        // Gunakan db.sync() jika kamu ingin sequelize otomatis menyesuaikan tabel (opsional)
+        // await db.sync(); 
+    } catch (error) {
+        console.error("Connection error:", error);
+    }
 
-app.use(cors());
-app.use(express.json());
-app.use(AuthRoute);
-app.use(userRoute);
-app.use("/api", chatbotRoutes);
-app.use(errorHandler);
+    // 2. Relasi Tabel (Jika belum dilakukan di dalam models/index.js)
+    // Users.belongsTo(Roles, { foreignKey: "roles_id" });
+    // Roles.hasMany(Users, { foreignKey: "roles_id" });
 
+    // 3. Middleware
+    app.use(cors({
+        credentials: true,
+        origin: 'http://localhost:3000' // Pastikan ini sesuai dengan port React-mu
+    }));
+    app.use(cookieParser()); 
+    app.use(express.json());
 
-// Relations
-Users.belongsTo(Roles,{
-    foreignKey:"roles_id"
-});
+    // 4. Routing
+    app.use(router); 
+    app.use("/api", chatbotRoutes); // Akses AI akan menjadi http://localhost:5000/api/chat
 
-Roles.hasMany(Users,{
-    foreignKey:"roles_id"
-});
+    // 5. Error Handler (Harus paling bawah setelah rute)
+    app.use(errorHandler);
 
-app.listen(5000, ()=> console.log("Server running"));
+    // 6. Jalankan Server
+    app.listen(5000, () => {
+        console.log("Server running on port 5000");
+    });

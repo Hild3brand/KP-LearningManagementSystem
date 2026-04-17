@@ -1,7 +1,28 @@
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyMjcyMDM3IiwibmFtZSI6IlJhc3lhYWQgSGlsZGVicmFuZCBHdW5hd2FuIiwic3RhdHVzIjoiQWN0aXZlIiwicm9sZXNfaWQiOjEsImlhdCI6MTc3MzI4MzYyOSwiZXhwIjoxNzczMjgzNjQ5fQ.6a0wZXrxqkhgAwETg_UUw4xA8XgyDgaw8nUhgLMBoKQ
+
+###
+Content-Type: application/json
+
+{
+    "id": "2272037",
+    "name": "Rasyaad Hildebrand Gunawan",
+    "password": "2272037",
+    "status": "active",
+    "roles_id": 1
+}
+
+### Login
 POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "id":"2272037",
-    "password":"2272037"
+    "id": "2272037",
+    "password": "2272037"
 }
+
+### Refresh Token
+GET http://localhost:5000/token
+
+### Logout
+DELETE http://localhost:5000/logout 

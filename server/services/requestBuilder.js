@@ -1,89 +1,143 @@
-export const buildChatRequest = (userMessage) => {
-  const zeroShotPrompt = `
-    ROLE:
-    You are an AI Korean language tutor.
+export const buildChatRequest = (userMessage, level) => {
+  let systemPrompt = "";
+  
+  // Pastikan level berupa angka untuk pengecekan
+  const currentLevel = Number(level) || 1; 
+  console.log("Level yang masuk dari frontend:", currentLevel);
 
-    LEARNING STATE:
-    Bloom Level: Remembering
-    Topic: {topic}
+  // Deteksi otomatis kalau request ini minta kuis JSON
+  const isQuizRequest = typeof userMessage === "string" && userMessage.toUpperCase().includes("JSON");
 
-    INSTRUCTION:
-    Ask the student to recall information related to the topic.
-    Do not give hints or examples unless the student fails.
+  if (isQuizRequest) {
+    console.log(`🔥 MODE KUIS JSON AKTIF (Level: ${currentLevel}) 🔥`);
+    
+    // Instruksi spesifik berdasarkan level Bloom's Taxonomy
+    let levelInstruction = "";
+    if (currentLevel === 1) {
+      levelInstruction = "TINGKAT KESULITAN: Level 1 (Mengingat). Buat soal hafalan dasar seperti pengenalan huruf (Vokal/Konsonan) atau arti kosakata dasar.";
+    } else if (currentLevel === 2) {
+      levelInstruction = "TINGKAT KESULITAN: Level 2 (Memahami). Buat soal pemahaman makna kata, penggunaan partikel dasar (seperti 은/는, 이/가), atau terjemahan kalimat sederhana.";
+    } else if (currentLevel === 3) {
+      levelInstruction = "TINGKAT KESULITAN: Level 3 (Menerapkan). Buat soal praktik seperti melengkapi kalimat rumpang, menyusun kata menjadi kalimat yang benar, atau memilih tata bahasa yang tepat dalam konteks.";
+    } else {
+      levelInstruction = "TINGKAT KESULITAN: Umum. Buatkan soal bahasa Korea standar.";
+    }
 
-    STUDENT MESSAGE:
-    {student_query}
-  `;
+    systemPrompt = `
+      Anda adalah mesin pembuat kuis bahasa Korea berformat JSON murni.
+      
+      ${levelInstruction}
+      
+      ATURAN KONTEN KUIS:
+      1. Bagian "question" WAJIB menggunakan abjad Latin/Indonesia (Contoh benar: "Huruf Korea untuk bunyi 'u' adalah?").
+      2. DILARANG KERAS menanyakan Hangul dengan Hangul (Contoh salah: "Huruf Korea untuk '우' adalah?").
+      3. Bagian "options" dan "answer" WAJIB menggunakan huruf Hangul Korea.
+      4. Anda HANYA boleh mengeluarkan output berupa JSON Array Murni. Jangan gunakan markdown (seperti \`\`\`json) atau teks pengantar apapun.
+    `;
+    
+    // Injeksi format wajib ke pesan user
+    userMessage = userMessage + `\n\nOUTPUT WAJIB MENGGUNAKAN STRUKTUR JSON INI DAN HANYA JSON INI SAJA:\n[\n  {\n    "question": "Huruf Korea untuk bunyi 'u' adalah?",\n    "options": ["ㅏ", "ㅓ", "ㅗ", "ㅜ"],\n    "answer": "ㅜ"\n  }\n]`;
+  } 
+  else if (currentLevel === 1) {
+    console.log("User is at Remembering level");
+    systemPrompt = `
+      ROLE:
+      You are an AI Korean language tutor.
 
-  const fewShotPrompt = `
-    ROLE:
-    You are a Korean language tutor.
+      LEARNING STATE:
+      Bloom Level: Remembering
 
-    LEARNING STATE:
-    Bloom Level: Understanding
+      INSTRUCTION:
+      Ask the student to recall information related to the topic.
+      Do not give hints or examples unless the student fails.
 
-    EXAMPLES:
-    Sentence: 저는 물을 마십니다
-    Meaning: I drink water
+      NOTE:
+      - Answer clearly and concisely
+      - Use short paragraphs
+      - Use bullet points if needed
+      - Highlight important words using **bold**
+      - Use line breaks for readability
+      - Do NOT return long dense text
+    `;
+  } 
+  else if (currentLevel === 2) {
+    console.log("User is at Understanding level");
+    systemPrompt = `
+      ROLE:
+      You are a Korean language tutor.
 
-    Sentence: 저는 밥을 먹습니다
-    Meaning: I eat rice
+      LEARNING STATE:
+      Bloom Level: Understanding
 
-    TASK:
-    Explain the meaning of the following sentence.
+      TASK:
+      Explain the meaning of the sentence.
+      
+      NOTE:
+      - Answer clearly and concisely
+      - Use short paragraphs
+      - Use bullet points if needed
+      - Highlight important words using **bold**
+      - Use line breaks for readability
+      - Do NOT return long dense text
+    `;
+  } 
+  else if (currentLevel === 3) {
+    console.log("User is at Applying level");
+    systemPrompt = `
+      ROLE:
+      You are a Korean tutor.
 
-    Student message:
-    {student_query}
-  `;
+      LEARNING STATE:
+      Bloom Level: Applying
 
-  const chainOfThoughtPrompt = `
-    ROLE:
-    You are an AI Korean tutor.
+      INSTRUCTION:
+      Guide step by step:
+      1 Identify vocabulary
+      2 Choose grammar
+      3 Construct sentence
 
-    LEARNING STATE:
-    Bloom Level: Applying
-    Topic: {topic}
+      NOTE:
+      - Answer clearly and concisely
+      - Use short paragraphs
+      - Use bullet points if needed
+      - Highlight important words using **bold**
+      - Use line breaks for readability
+      - Do NOT return long dense text
+    `;
+  } 
+  else {
+    console.log("User level is unknown or not provided");
+    systemPrompt = `
+      ROLE:
+      You are a helpful AI Korean language tutor.
 
-    INSTRUCTION:
-    Guide the student step by step.
+      INSTRUCTION:
+      Answer the user's question clearly and concisely about Korean language. 
+      If they ask for a quiz, wait for the proper prompt format.
 
-    Steps:
-    1 Identify key vocabulary
-    2 Choose grammar structure
-    3 Construct the sentence
-
-    Student request:
-    {student_query}
-  `;
-
-  const directionalStimulusPrompt = `
-    ROLE:
-    You are a Korean tutor.
-
-    LEARNING STATE:
-    Remedial Mode
-
-    INSTRUCTION:
-    Give directional hints instead of the answer.
-
-    Topic: {topic}
-    Student failed question:
-    {student_query}
-  `;
+      NOTE:
+      - Answer clearly and concisely
+      - Use short paragraphs
+      - Use bullet points if needed
+      - Highlight important words using **bold**
+      - Use line breaks for readability
+      - Do NOT return long dense text
+    `;
+  }
 
   return {
     messages: [
       {
         role: "system",
-        content: `You are a Korean language tutor.`
+        content: systemPrompt
       },
       {
         role: "user",
         content: userMessage
       }
     ],
-    maxTokens: 200,
-    temperature: 0.5,
+    maxTokens: 2000, 
+    temperature: 0.3, 
     topP: 0.8
   };
 };
