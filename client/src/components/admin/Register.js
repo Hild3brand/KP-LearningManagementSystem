@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 const Register = () => {
     const [id, setId] = useState(''); 
     const [name, setName] = useState(''); 
@@ -23,7 +24,7 @@ const Register = () => {
         }
 
         try {
-            await axios.post(`${process.env.BE_API_URL}/register`, {
+            await axios.post(`${process.env.REACT_APP_BE_API_URL}/register`, {
                 id: id,
                 name: name,
                 password: password,

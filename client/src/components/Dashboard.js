@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'; 
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar'; 
+import Navbar from './Navbar';
+
 
 const axiosJWT = axios.create();
 
@@ -21,7 +22,7 @@ const Dashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get(`${process.env.BE_API_URL}/token`, {
+                const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, {
                     withCredentials: true 
                 });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
@@ -42,7 +43,7 @@ const Dashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get(`${process.env.BE_API_URL}/token`, {
+            const response = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, {
                 withCredentials: true 
             });
             
@@ -61,7 +62,7 @@ const Dashboard = () => {
 
     const getUsers = async () => {
         try {
-            const response = await axiosJWT.get(`${process.env.BE_API_URL}/users`, {
+            const response = await axiosJWT.get(`${process.env.REACT_APP_BE_API_URL}/users`, {
                 headers: {
                     Authorization: `Bearer ${token}` 
                 }

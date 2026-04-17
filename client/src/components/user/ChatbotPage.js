@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+
 const ChatbotPage = () => {
     const [userData, setUserData] = useState({ name: 'Student', level: 'Beginner 1', xp: 0 });
     const [token, setToken] = useState('');
@@ -28,13 +29,13 @@ const ChatbotPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resToken = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
+                const resToken = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, { withCredentials: true });
                 const accessToken = resToken.data.accessToken;
                 const decoded = jwtDecode(accessToken);
                 setToken(accessToken);
                 setUserData({ name: decoded.name, level: decoded.level || 'Beginner 1', xp: decoded.xp });
 
-                const resProgress = await axios.get(`${process.env.BE_API_URL}/user-progress`, { 
+                const resProgress = await axios.get(`${process.env.REACT_APP_BE_API_URL}/user-progress`, { 
                     headers: { Authorization: `Bearer ${accessToken}` }, 
                     withCredentials: true 
                 });
@@ -64,7 +65,7 @@ const ChatbotPage = () => {
         
         setIsLoading(true); 
         try {
-            const response = await axios.post(`${process.env.BE_API_URL}/api/chat`, {
+            const response = await axios.post(`${process.env.REACT_APP_BE_API_URL}/api/chat`, {
                 message: `(PENTING: Jawablah selalu dalam Bahasa Indonesia) ${textToSend}`,
                 history: messages.filter(m => m.type === 'text').slice(-5)
             }, { headers: { Authorization: `Bearer ${token}` }, withCredentials: true });
@@ -98,7 +99,7 @@ const ChatbotPage = () => {
         [{"type":"multiple_choice","question":"...","options":["...","...","...","..."],"answer":"...","explanation":"..."},{"type":"fill_in_the_blank","question":"...","answer":"...","explanation":"..."}]`;
 
         try {
-            const response = await axios.post(`${process.env.BE_API_URL}/api/chat`, { 
+            const response = await axios.post(`${process.env.REACT_APP_BE_API_URL}/api/chat`, { 
                 message: prompt, 
                 history: [] 
             }, { headers: { Authorization: `Bearer ${token}` } });

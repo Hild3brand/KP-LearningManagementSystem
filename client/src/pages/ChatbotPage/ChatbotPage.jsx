@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ChatBubble from "../../components/ChatBubble";
 import "./ChatbotPage.css";
 
+
 const ChatbotPage = () => {
   const navigate = useNavigate();
 
@@ -57,7 +58,7 @@ const ChatbotPage = () => {
 
     try {
       const res = await axios.post(
-        `${process.env.BE_API_URL}/api/chat`,
+        `${process.env.REACT_APP_BE_API_URL}/api/chat`,
         {
           message: currentInput,
           level_detail_id: user.level_detail_id,

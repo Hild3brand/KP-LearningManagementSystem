@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
+
 const Login = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -11,14 +12,13 @@ const Login = () => {
 
     const Auth = async (e) => {
         e.preventDefault();
-        console.log(process.env.BE_API_URL);
         try {
-            const response = await axios.post(`${process.env.BE_API_URL}/login`, {
+            const response = await axios.post(`${process.env.REACT_APP_BE_API_URL}/login`, {
                 id: id,
                 password: password,
             });
 
-            const tokenResponse = await axios.get(`${process.env.BE_API_URL}/token`, {
+            const tokenResponse = await axios.get(`${process.env.REACT_APP_BE_API_URL}/token`, {
                 withCredentials: true
             });
 

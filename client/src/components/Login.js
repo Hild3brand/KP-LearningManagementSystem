@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 const Login = () => {
     const [id, setId] = useState(''); 
     const [password, setPassword] = useState('');    
@@ -14,7 +15,7 @@ const Login = () => {
         // Pengecekan confPassword SUDAH DIHAPUS karena tidak diperlukan saat Login
 
         try {
-            await axios.post(`${process.env.BE_API_URL}/login`, {
+            await axios.post(`${process.env.REACT_APP_BE_API_URL}/login`, {
                 id: id,
                 password: password,
             });
