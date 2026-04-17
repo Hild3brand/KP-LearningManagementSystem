@@ -21,7 +21,7 @@ const Dashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get('http://localhost:5000/token', {
+                const response = await axios.get(`${process.env.BE_API_URL}/token`, {
                     withCredentials: true 
                 });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/token', {
+            const response = await axios.get(`${process.env.BE_API_URL}/token`, {
                 withCredentials: true 
             });
             
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
     const getUsers = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:5000/users', {
+            const response = await axiosJWT.get(`${process.env.BE_API_URL}/users`, {
                 headers: {
                     Authorization: `Bearer ${token}` 
                 }

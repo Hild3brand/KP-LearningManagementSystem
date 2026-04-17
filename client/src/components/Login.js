@@ -14,7 +14,7 @@ const Login = () => {
         // Pengecekan confPassword SUDAH DIHAPUS karena tidak diperlukan saat Login
 
         try {
-            await axios.post('http://localhost:5000/login', {
+            await axios.post(`${process.env.BE_API_URL}/login`, {
                 id: id,
                 password: password,
             });

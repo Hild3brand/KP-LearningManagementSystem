@@ -23,7 +23,7 @@ const Register = () => {
         }
 
         try {
-            await axios.post('http://localhost:5000/register', {
+            await axios.post(`${process.env.BE_API_URL}/register`, {
                 id: id,
                 name: name,
                 password: password,

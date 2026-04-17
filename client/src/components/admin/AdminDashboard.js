@@ -30,7 +30,7 @@ const AdminDashboard = () => {
         const requestIntercept = axiosJWT.interceptors.request.use(async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get('http://localhost:5000/token', { withCredentials: true });
+                const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
                 config.headers.Authorization = `Bearer ${response.data.accessToken}`;
                 setToken(response.data.accessToken);
                 const decoded = jwtDecode(response.data.accessToken);
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/token', { withCredentials: true });
+            const response = await axios.get(`${process.env.BE_API_URL}/token`, { withCredentials: true });
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken); 
             setName(decoded.name); 
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
 
     const getUsers = async () => {
         try {
-            const response = await axiosJWT.get('http://localhost:5000/users', {
+            const response = await axiosJWT.get(`${process.env.BE_API_URL}/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(response.data);
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
     const deleteUser = async (id) => {
         if (window.confirm("Yakin ingin menghapus secara permanen?")) {
             try {
-                await axiosJWT.delete(`http://localhost:5000/users/${id}`, {
+                await axiosJWT.delete(`${process.env.BE_API_URL}/users/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 getUsers(); 
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axiosJWT.patch(`http://localhost:5000/users/${editData.id}`, {
+            await axiosJWT.patch(`${process.env.BE_API_URL}/users/${editData.id}`, {
                 name: editData.name,
                 status: editData.status
             }, {
