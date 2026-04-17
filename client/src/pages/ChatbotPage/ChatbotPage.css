@@ -1,0 +1,46 @@
+.typing-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.typing-bubble {
+  padding: 8px 12px;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #6c757d;
+  border-radius: 50%;
+  animation: blink 1.4s infinite both;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+    transform: translateY(0px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translateY(0px);
+  }
+}
